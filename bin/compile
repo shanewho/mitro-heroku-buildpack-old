@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+echo "-----&gt; Installing Mitro"
+
+# parse args
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# <BUILD_DIR> is (during this stage) a temporary directory. 
+# During execution of your slug it'll be known as '/app'.
+
+. $(dirname $0)/common
+
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+
+function indent() {
+    c='s/^/       /'
+        case $(uname) in
+        Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+    esac
+}
+
+#create the cache dir if it doesn't exist
+mkdir -p $VENDORING_DIR
+
+# change to vendoring dir to install apache ant
+cd $VENDORING_DIR
+
+if [ -x $ANT_HOME/bin/ant ] ; then
+#assuming Apache Ant is already installed...
+    echo "-----> Using Apache Ant $ANT_VER....."
+else
+    echo "-----> Installing Apache Ant $ANT_VER..... [start]"
+    curl --max-time 180 --location $ANT_URL | tar xz
+    chmod +x $ANT_HOME/bin/ant
+    echo "-----> Installing Apache Ant $ANT_VER..... [done ]!"
+fi
+
+
+if [ ! -f $BUILD_DIR/build.xml ] ; then
+    echo "Failed to build app with Apache Ant"
+fi
+
+
+# change to build dir to run ant
+cd ${BUILD_DIR}
+
+export ANT_OPTS="-Xmx512m"
+
+# build app
+#BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} clean install"
+BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} server"
+echo "-----> executing $BUILDCMD"
+
+$BUILDCMD 2>&1 | indent
+ls -al ${PWD}  | indent
+
+ls -al ${BUILD_DIR}  | indent
+
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+    echo " !     Failed to build app with Apache Ant"
+    exit 1
+fi
+
+
+
+# change to the the BUILD_DIR ($1)
+#cd $1
+# download the binary (-O) silently (-s)
+#curl https://raw.githubusercontent.com/scottmotte/mupdf-binary/master/mupdf.tar.gz -s -O -ssl3
+# make a directory to untar (like unzip) the binary
+#mkdir -p vendor/mupdf
+# untar the binary to the directory we want
+#tar -C vendor/mupdf -xvf mupdf.tar.gz
+
+#pwd
+#ls
+
