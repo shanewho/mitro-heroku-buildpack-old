@@ -25,6 +25,39 @@ function indent() {
     esac
 }
 
+
+
+
+
+JVM_COMMON_BUILDPACK=http://lang-jvm.s3.amazonaws.com/jvm-buildpack-common-v3.tar.gz
+mkdir -p /tmp/jvm-common
+curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
+. /tmp/jvm-common/bin/util
+. /tmp/jvm-common/bin/java
+
+export_env_dir $ENV_DIR
+
+KEEP_M2_CACHE="true"
+
+# create default system.properties
+      if [ ! -f ${BUILD_DIR}/system.properties ]; then
+        cat > ${BUILD_DIR}/system.properties <<EOF
+        java.runtime.version=1.7
+        EOF
+        fi
+
+# install JDK
+        javaVersion=$(detect_java_version ${BUILD_DIR})
+    echo -n "-----> Installing OpenJDK ${javaVersion}..."
+    install_java ${BUILD_DIR} ${javaVersion}
+    jdk_overlay ${BUILD_DIR}
+    echo " done"
+
+
+
+
+
+
 #create the cache dir if it doesn't exist
 mkdir -p $VENDORING_DIR
 
