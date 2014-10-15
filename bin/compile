@@ -49,6 +49,7 @@ fi
 
 # change to build dir to run ant
 cd ${BUILD_DIR}
+cd mitro-core
 
 export ANT_OPTS="-Xmx512m"
 
