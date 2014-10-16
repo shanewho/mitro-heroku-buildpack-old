@@ -45,7 +45,8 @@ export_env_dir $ENV_DIR
 #fi
 
 # install JDK
-javaVersion=$(detect_java_version ${BUILD_DIR})
+#javaVersion=$(detect_java_version ${BUILD_DIR})
+javaVersion=1.7
 echo -n "-----> Installing OpenJDK ${javaVersion}..."
 install_java ${BUILD_DIR} ${javaVersion}
 jdk_overlay ${BUILD_DIR}
