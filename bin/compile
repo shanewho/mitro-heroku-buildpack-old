@@ -58,8 +58,6 @@ echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebase
 
 
 javac -version
-echo 'ls app'
-ls /app/.jdk
 echo 'ls java'
 ls java
 
