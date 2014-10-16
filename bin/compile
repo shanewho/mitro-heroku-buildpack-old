@@ -88,10 +88,13 @@ cd ${BUILD_DIR}
 cd mitro-core
 
 javac -version
-echo 'ls java'
+echo 'ls'
 ls
+echo 'ls ..'
 ls ..
+echo 'ls java'
 ls java
+echo 'ls done'
 
 export ANT_OPTS="-Xmx512m"
 
