@@ -4,7 +4,8 @@
 # fail fast
 set -e
 
-echo "-----&gt; Installing Mitro"
+echo "-----> Installing Mitro"
+echo "-----> DB: $DATABASE_URL"
 
 # parse args
 BUILD_DIR=$1
