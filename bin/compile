@@ -57,7 +57,10 @@ mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="$(dirname $0)/bin:/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebaseOnly=true"' >> $PROFILE_PATH
 
+
 PATH="$(dirname $0)/bin:$PATH"
+ls $(dirname $0)
+echo "$(dirname $0)"
 echo "PATH: $PATH"
 
 
@@ -90,14 +93,6 @@ fi
 cd ${BUILD_DIR}
 cd mitro-core
 
-javac -version
-echo 'ls'
-ls
-echo 'ls ..'
-ls ..
-echo 'ls java'
-ls java
-echo 'ls done'
 
 export ANT_OPTS="-Xmx512m"
 
