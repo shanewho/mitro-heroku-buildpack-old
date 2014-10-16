@@ -37,21 +37,19 @@ curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
 
 export_env_dir $ENV_DIR
 
-KEEP_M2_CACHE="true"
-
-# create default system.properties
-      if [ ! -f ${BUILD_DIR}/system.properties ]; then
-        cat > ${BUILD_DIR}/system.properties <<EOF
-        java.runtime.version=1.7
-        EOF
-        fi
+## create default system.properties
+#if [ ! -f ${BUILD_DIR}/system.properties ]; then
+    #cat > ${BUILD_DIR}/system.properties <<EOF
+#java.runtime.version=1.7
+#EOF
+#fi
 
 # install JDK
-        javaVersion=$(detect_java_version ${BUILD_DIR})
-    echo -n "-----> Installing OpenJDK ${javaVersion}..."
-    install_java ${BUILD_DIR} ${javaVersion}
-    jdk_overlay ${BUILD_DIR}
-    echo " done"
+javaVersion=$(detect_java_version ${BUILD_DIR})
+echo -n "-----> Installing OpenJDK ${javaVersion}..."
+install_java ${BUILD_DIR} ${javaVersion}
+jdk_overlay ${BUILD_DIR}
+echo " done"
 
 
 
@@ -115,3 +113,4 @@ fi
 #pwd
 #ls
 
+blarrrrr
