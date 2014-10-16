@@ -59,7 +59,6 @@ echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebase
 
 
 PATH="$(dirname $0):$PATH"
-unzip --version
 ls $(dirname $0)
 echo "$(dirname $0)"
 echo "PATH: $PATH"
