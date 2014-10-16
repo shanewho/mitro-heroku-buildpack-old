@@ -5,6 +5,8 @@
 set -e
 
 echo "-----> Installing Mitro"
+
+export "DATABASE_URL=$(cat $env_dir/DATABASE_URL)"
 echo "-----> DB: $DATABASE_URL"
 
 # parse args
