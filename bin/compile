@@ -42,6 +42,9 @@ curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
 . /tmp/jvm-common/bin/java
 
 export_env_dir $ENV_DIR
+echo "ENV DIR LSITING"
+ls $ENV_DIR
+echo "---"
 
 ## create default system.properties
 #if [ ! -f ${BUILD_DIR}/system.properties ]; then
