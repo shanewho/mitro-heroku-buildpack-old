@@ -12,9 +12,8 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
-export "port=443"
-echo "-----> DB: $DATABASE_URL"
+#export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
+#echo "-----> DB: $DATABASE_URL"
 
 # <BUILD_DIR> is (during this stage) a temporary directory. 
 # During execution of your slug it'll be known as '/app'.
@@ -104,7 +103,7 @@ export ANT_OPTS="-Xmx512m"
 
 # build app
 #BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} clean install"
-BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} server"
+BUILDCMD="sudo $ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} server"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
