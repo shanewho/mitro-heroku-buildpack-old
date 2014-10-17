@@ -14,6 +14,7 @@ ENV_DIR=$3
 
 #export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
 #echo "-----> DB: $DATABASE_URL"
+#echo "-----> PORT: $PORT"
 
 # <BUILD_DIR> is (during this stage) a temporary directory. 
 # During execution of your slug it'll be known as '/app'.
