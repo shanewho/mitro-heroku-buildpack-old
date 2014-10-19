@@ -123,7 +123,9 @@ cd $BUILD_DIR
 #DB="jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF"
 
 
-DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
+export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
+echo "-----> DB: $DATABASE_URL"
+#DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
 echo "DBURL: "
 echo $DATABASE_URL
 
