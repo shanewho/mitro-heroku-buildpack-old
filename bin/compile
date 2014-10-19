@@ -127,7 +127,7 @@ cd $BUILD_DIR
 #postgres://ldwgajxchlubup:fJHbULaTUAAS-2c5d7wXE6HgrF@ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob
 DB="jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF"
 
-echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=$PORT -Ddatabase_url=$DB -jar mitro-core/build/mitrocore.jar" > Procfile
+echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=$PORT -Ddatabase_url=\'$DB\' -jar mitro-core/build/mitrocore.jar" > Procfile
 
 echo "PROCFILE LOOKS LIKE:"
 cat ./Procfile
