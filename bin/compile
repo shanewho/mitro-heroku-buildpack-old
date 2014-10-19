@@ -4,8 +4,7 @@
 # fail fast
 set -e
 
-echo "-----> Installing Mitro"
-
+echo "-----> Installing Mitro Server"
 
 # parse args
 BUILD_DIR=$1
@@ -18,14 +17,6 @@ ENV_DIR=$3
 . $(dirname $0)/common
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
-
-function indent() {
-    c='s/^/       /'
-        case $(uname) in
-        Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-    esac
-}
 
 if [ ! -e $ENV_DIR/DATABASE_URL2 ]
 then
