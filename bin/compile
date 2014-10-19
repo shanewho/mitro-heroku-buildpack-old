@@ -21,6 +21,7 @@ fi
 # During execution of your slug it'll be known as '/app'.
 
 . $(dirname $0)/common
+. $(dirname $0)/java
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
@@ -30,11 +31,11 @@ then
   exit 1;
 fi
 
-JVM_COMMON_BUILDPACK=http://lang-jvm.s3.amazonaws.com/jvm-buildpack-common-v3.tar.gz
-mkdir -p /tmp/jvm-common
-curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
-. /tmp/jvm-common/bin/util
-. /tmp/jvm-common/bin/java
+#JVM_COMMON_BUILDPACK=http://lang-jvm.s3.amazonaws.com/jvm-buildpack-common-v3.tar.gz
+#mkdir -p /tmp/jvm-common
+#curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
+#. /tmp/jvm-common/bin/util
+#. /tmp/jvm-common/bin/java
 
 # install JDK
 javaVersion=1.7
@@ -75,7 +76,7 @@ export ANT_OPTS="-Xmx512m"
 # build app
 BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} jar"
 
-echo "-----> Building mitro-core......"
+echo "-----> Building mitro-core....."
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
