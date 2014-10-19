@@ -12,6 +12,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 if [ -e $ENV_DIR/DEBUG_BUILDPACK ]
+then
     DEBUGB=true
 fi
 
