@@ -122,13 +122,14 @@ cd $BUILD_DIR
 #postgres://ldwgajxchlubup:fJHbULaTUAAS-2c5d7wXE6HgrF@ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob
 #DB="jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF"
 
-echo "DBURL: "
-echo $DATABASE_URL
-
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
 [[ $DATABASE_URL =~ $DB_REGX ]] 
 
 DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
+
+echo "DBURL: "
+echo $DATABASE_URL
+
 DB_USER=${BASH_REMATCH[1]}
 DB_PASS=${BASH_REMATCH[2]}
 DB_HOST=${BASH_REMATCH[3]}
@@ -136,6 +137,9 @@ DB_PORT=${BASH_REMATCH[4]}
 DB_DATABASE=${BASH_REMATCH[5]}
 
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
+
+echo "DBURI: "
+echo $DB_URL
 
 echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
