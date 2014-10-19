@@ -12,6 +12,8 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+ls $ENV_DIR
+
 #export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
 #echo "-----> DB: $DATABASE_URL"
 #echo "-----> PORT: $PORT"
