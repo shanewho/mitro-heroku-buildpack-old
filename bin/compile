@@ -37,13 +37,7 @@ echo -n "-----> Installing OpenJDK ${javaVersion}..."
 install_java ${BUILD_DIR} ${javaVersion}
 jdk_overlay ${BUILD_DIR}
 
-
-#PROFILE_PATH="$BUILD_DIR/.profile.d/java.sh"
-#mkdir -p $(dirname $PROFILE_PATH)
-#echo 'export PATH="$(dirname $0):/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
-#echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebaseOnly=true"' >> $PROFILE_PATH
-
-PATH="$(dirname $0):$PATH"
+#PATH="$(dirname $0):$PATH"
 
 #create the cache dir if it doesn't exist
 mkdir -p $VENDORING_DIR
