@@ -121,6 +121,10 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
     exit 1
 fi
 
+cd $BUILD_DIR
+#echo "web: java -ea -DgenerateSecretsForTest=true -Dhttps_port=9443 -Dhttp_port=$PORT -jar mitro-core/build/mitrocore.jar" > Procfile
+echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=$PORT -jar mitro-core/build/mitrocore.jar" > Procfile
+
 
 
 # change to the the BUILD_DIR ($1)
