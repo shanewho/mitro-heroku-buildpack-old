@@ -11,6 +11,11 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+if [ -e $ENV_DIR/DEBUG_BUILDPACK ]
+    DEBUGB = 1
+fi
+
+
 # <BUILD_DIR> is (during this stage) a temporary directory. 
 # During execution of your slug it'll be known as '/app'.
 
@@ -68,8 +73,8 @@ fi
 
 
 # change to build dir to run ant
-cd ${BUILD_DIR}
-cd mitro-core
+cd ${BUILD_DIR}/mitro-core
+#cd mitro-core
 
 export ANT_OPTS="-Xmx512m"
 
@@ -89,9 +94,9 @@ fi
 
 cd $BUILD_DIR
 
-export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
-echo "-----> DB: $DATABASE_URL"
-#DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
+#export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
+#echo "-----> DB: $DATABASE_URL"
+DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
 
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
 [[ $DATABASE_URL =~ $DB_REGX ]] 
@@ -106,5 +111,6 @@ DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&p
 
 echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
-echo "PROCFILE LOOKS LIKE:"
-cat ./Procfile
+if [ -n "$1" ]
+    cat ./Procfile
+fi
