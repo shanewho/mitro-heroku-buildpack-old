@@ -30,7 +30,6 @@ then
   exit 1;
 fi
 
-
 JVM_COMMON_BUILDPACK=http://lang-jvm.s3.amazonaws.com/jvm-buildpack-common-v3.tar.gz
 mkdir -p /tmp/jvm-common
 curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
@@ -68,20 +67,25 @@ else
 fi
 
 
-# change to build dir to run ant
+# change to mitro-core dir to run ant
 cd ${BUILD_DIR}/mitro-core
-#cd mitro-core
 
 export ANT_OPTS="-Xmx512m"
 
 # build app
 BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} jar"
+
+echo "-----> Building mitro-core......"
 echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
-ls -al ${PWD}  | indent
 
-ls -al ${BUILD_DIR}  | indent
+if [ -n "$DEBUGBP" ]
+then
+    ls -al ${PWD}  | indent
+
+    ls -al ${BUILD_DIR}  | indent
+fi
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
     echo " !     Failed to build app with Apache Ant"
@@ -90,11 +94,10 @@ fi
 
 cd $BUILD_DIR
 
-#export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
-#echo "-----> DB: $DATABASE_URL"
+# Convert Heroku DATABASE_URL to jbdc format
 DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
-
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
+
 [[ $DATABASE_URL =~ $DB_REGX ]] 
 
 DB_USER=${BASH_REMATCH[1]}
@@ -105,6 +108,7 @@ DB_DATABASE=${BASH_REMATCH[5]}
 
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
 
+# Write Procfile to root
 echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
 if [ -n "$DEBUGBP" ]
