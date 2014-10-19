@@ -13,7 +13,7 @@ ENV_DIR=$3
 
 if [ -e $ENV_DIR/DEBUG_BUILDPACK ]
 then
-    DEBUGB=true
+    DEBUGBP=true
 fi
 
 
@@ -68,11 +68,6 @@ else
 fi
 
 
-if [ ! -f $BUILD_DIR/build.xml ] ; then
-    echo "Failed to build app with Apache Ant"
-fi
-
-
 # change to build dir to run ant
 cd ${BUILD_DIR}/mitro-core
 #cd mitro-core
@@ -112,6 +107,7 @@ DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&p
 
 echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
-if [ -n "$1" ]
+if [ -n "$DEBUGBP" ]
+then
     cat ./Procfile
 fi
