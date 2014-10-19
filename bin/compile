@@ -18,13 +18,11 @@ ENV_DIR=$3
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
-if [ ! -e $ENV_DIR/DATABASE_URL2 ]
+if [ ! -e $ENV_DIR/DATABASE_URL ]
 then
   echo "No DATABASE_URL found. Make sure you have added the postgres addon."
   exit 1;
 fi
-
-
 
 
 JVM_COMMON_BUILDPACK=http://lang-jvm.s3.amazonaws.com/jvm-buildpack-common-v3.tar.gz
@@ -33,15 +31,7 @@ curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
 . /tmp/jvm-common/bin/util
 . /tmp/jvm-common/bin/java
 
-## create default system.properties
-#if [ ! -f ${BUILD_DIR}/system.properties ]; then
-    #cat > ${BUILD_DIR}/system.properties <<EOF
-#java.runtime.version=1.7
-#EOF
-#fi
-
 # install JDK
-#javaVersion=$(detect_java_version ${BUILD_DIR})
 javaVersion=1.7
 echo -n "-----> Installing OpenJDK ${javaVersion}..."
 install_java ${BUILD_DIR} ${javaVersion}
@@ -53,15 +43,7 @@ mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="$(dirname $0):/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebaseOnly=true"' >> $PROFILE_PATH
 
-
 PATH="$(dirname $0):$PATH"
-ls $(dirname $0)
-echo "$(dirname $0)"
-echo "PATH: $PATH"
-
-
-
-
 
 #create the cache dir if it doesn't exist
 mkdir -p $VENDORING_DIR
@@ -89,12 +71,9 @@ fi
 cd ${BUILD_DIR}
 cd mitro-core
 
-
 export ANT_OPTS="-Xmx512m"
 
 # build app
-#BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} clean install"
-#BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} server"
 BUILDCMD="$ANT_HOME/bin/ant -Duser.home=${BUILD_DIR} jar"
 echo "-----> executing $BUILDCMD"
 
@@ -109,18 +88,10 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
 fi
 
 cd $BUILD_DIR
-#echo "web: java -ea -DgenerateSecretsForTest=true -Dhttps_port=9443 -Dhttp_port=$PORT -jar mitro-core/build/mitrocore.jar" > Procfile
-
-#postgres://ldwgajxchlubup:fJHbULaTUAAS-2c5d7wXE6HgrF@ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob
-#DB="jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF"
-
-
 
 export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
 echo "-----> DB: $DATABASE_URL"
 #DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
-echo "DBURL: "
-echo $DATABASE_URL
 
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
 [[ $DATABASE_URL =~ $DB_REGX ]] 
