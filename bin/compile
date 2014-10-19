@@ -14,7 +14,7 @@ ENV_DIR=$3
 
 #export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
 #echo "-----> DB: $DATABASE_URL"
-echo "-----> PORT: $PORT"
+#echo "-----> PORT: $PORT"
 
 # <BUILD_DIR> is (during this stage) a temporary directory. 
 # During execution of your slug it'll be known as '/app'.
@@ -40,11 +40,6 @@ mkdir -p /tmp/jvm-common
 curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common
 . /tmp/jvm-common/bin/util
 . /tmp/jvm-common/bin/java
-
-export_env_dir $ENV_DIR
-echo "ENV DIR LSITING"
-ls $ENV_DIR
-echo "---"
 
 ## create default system.properties
 #if [ ! -f ${BUILD_DIR}/system.properties ]; then
@@ -133,15 +128,16 @@ echo $DATABASE_URL
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
 [[ $DATABASE_URL =~ $DB_REGX ]] 
 
+DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
 DB_USER=${BASH_REMATCH[1]}
 DB_PASS=${BASH_REMATCH[2]}
 DB_HOST=${BASH_REMATCH[3]}
 DB_PORT=${BASH_REMATCH[4]}
 DB_DATABASE=${BASH_REMATCH[5]}
 
-DB_URI="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
+DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
 
-echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URI' -jar mitro-core/build/mitrocore.jar" > Procfile
+echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
 echo "PROCFILE LOOKS LIKE:"
 cat ./Procfile
