@@ -12,12 +12,6 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-ls $ENV_DIR
-
-#export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
-#echo "-----> DB: $DATABASE_URL"
-#echo "-----> PORT: $PORT"
-
 # <BUILD_DIR> is (during this stage) a temporary directory. 
 # During execution of your slug it'll be known as '/app'.
 
@@ -33,6 +27,11 @@ function indent() {
     esac
 }
 
+if [ ! -e $ENV_DIR/DATABASE_URL2 ]
+then
+  echo "No DATABASE_URL found. Make sure you have added the postgres addon."
+  exit 1;
+fi
 
 
 
@@ -125,6 +124,7 @@ cd $BUILD_DIR
 #DB="jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF"
 
 
+
 export "DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)"
 echo "-----> DB: $DATABASE_URL"
 #DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
@@ -134,7 +134,6 @@ echo $DATABASE_URL
 DB_REGX="postgres://(.+):(.+)@(.+):([0-9]+)/(.+)" 
 [[ $DATABASE_URL =~ $DB_REGX ]] 
 
-
 DB_USER=${BASH_REMATCH[1]}
 DB_PASS=${BASH_REMATCH[2]}
 DB_HOST=${BASH_REMATCH[3]}
@@ -143,37 +142,7 @@ DB_DATABASE=${BASH_REMATCH[5]}
 
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
 
-echo "DBURI: "
-echo $DB_URL
-
 echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 
 echo "PROCFILE LOOKS LIKE:"
 cat ./Procfile
-
-
-## Lookd like this
-#postgres://ldwgajxchlubup:fJHbULaTUAAS-2c5d7wXE6HgrF@ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob
-## Needs to be this
-#jdbc:postgresql://ec2-54-197-241-79.compute-1.amazonaws.com:5432/dkh79l7ifjoob?user=ldwgajxchlubup&password=fJHbULaTUAAS-2c5d7wXE6HgrF
-
-
-
-
-
-
-
-
-# change to the the BUILD_DIR ($1)
-#cd $1
-# download the binary (-O) silently (-s)
-#curl https://raw.githubusercontent.com/scottmotte/mupdf-binary/master/mupdf.tar.gz -s -O -ssl3
-# make a directory to untar (like unzip) the binary
-#mkdir -p vendor/mupdf
-# untar the binary to the directory we want
-#tar -C vendor/mupdf -xvf mupdf.tar.gz
-
-#pwd
-#ls
-
-#blarrrrr
