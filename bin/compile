@@ -108,6 +108,7 @@ then
   echo "No RANDOM_KEY found. Set a the RANDOM_KEY variable."
   exit 1;
 fi
+RANDOM_KEY=$(cat $ENV_DIR/RANDOM_KEY)
 
 mkdir -p mitrocore_secrets/sign_keyczar
 java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
