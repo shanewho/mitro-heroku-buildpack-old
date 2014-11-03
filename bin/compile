@@ -92,11 +92,6 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
     exit 1
 fi
 
-echo "-----> Generating Keys"
-mkdir -p mitrocore_secrets/sign_keyczar
-java -cp build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
-java -cp build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
-
 cd $BUILD_DIR
 
 # Convert Heroku DATABASE_URL to jbdc format
@@ -112,6 +107,11 @@ DB_PORT=${BASH_REMATCH[4]}
 DB_DATABASE=${BASH_REMATCH[5]}
 
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
+
+echo "-----> Generating Keys"
+mkdir -p mitrocore_secrets/sign_keyczar
+java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
+java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
 
 echo "-----> Writing Procfile"
 # Write Procfile to root
