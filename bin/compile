@@ -31,6 +31,12 @@ then
   exit 1;
 fi
 
+if [ ! -e $ENV_DIR/RANDOM_KEY ]
+then
+  echo "No RANDOM_KEY found. Set a the RANDOM_KEY variable."
+  exit 1;
+fi
+
 # install JDK
 javaVersion=1.7
 echo -n "-----> Installing OpenJDK ${javaVersion}..."
@@ -102,8 +108,15 @@ DB_DATABASE=${BASH_REMATCH[5]}
 
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
 
+echo "-----> Writing Procfile"
 # Write Procfile to root
-echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
+#echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
+echo "web: java -ea -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
+
+echo "-----> Generating Keys"
+mkdir -p mitrocore_secrets/sign_keyczar
+java -cp build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
+java -cp build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
 
 if [ -n "$DEBUGBP" ]
 then
