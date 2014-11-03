@@ -31,12 +31,6 @@ then
   exit 1;
 fi
 
-if [ ! -e $ENV_DIR/RANDOM_KEY ]
-then
-  echo "No RANDOM_KEY found. Set a the RANDOM_KEY variable."
-  exit 1;
-fi
-
 # install JDK
 javaVersion=1.7
 echo -n "-----> Installing OpenJDK ${javaVersion}..."
@@ -109,9 +103,15 @@ DB_DATABASE=${BASH_REMATCH[5]}
 DB_URL="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?user=${DB_USER}&password=${DB_PASS}"
 
 echo "-----> Generating Keys"
+if [ ! -e $ENV_DIR/RANDOM_KEY ]
+then
+  echo "No RANDOM_KEY found. Set a the RANDOM_KEY variable."
+  exit 1;
+fi
+
 mkdir -p mitrocore_secrets/sign_keyczar
 java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
-java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
+echo '{"hmacKeyString":"${echo $RANDOM_KEY | openssl dgst -sha1 }","size":256}' > mitrocore_secrets/sign_keyczar/1
 
 echo "-----> Writing Procfile"
 # Write Procfile to root
