@@ -92,6 +92,11 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
     exit 1
 fi
 
+echo "-----> Generating Keys"
+mkdir -p mitrocore_secrets/sign_keyczar
+java -cp build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
+java -cp build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
+
 cd $BUILD_DIR
 
 # Convert Heroku DATABASE_URL to jbdc format
@@ -112,11 +117,6 @@ echo "-----> Writing Procfile"
 # Write Procfile to root
 #echo "web: java -ea -DgenerateSecretsForTest=true -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
 echo "web: java -ea -Dhttp_port=\$PORT -Ddatabase_url='$DB_URL' -jar mitro-core/build/mitrocore.jar" > Procfile
-
-echo "-----> Generating Keys"
-mkdir -p mitrocore_secrets/sign_keyczar
-java -cp build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
-java -cp build/mitrocore.jar org.keyczar.KeyczarTool addkey --location=mitrocore_secrets/sign_keyczar --status=primary
 
 if [ -n "$DEBUGBP" ]
 then
