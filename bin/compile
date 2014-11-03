@@ -111,7 +111,7 @@ fi
 
 mkdir -p mitrocore_secrets/sign_keyczar
 java -cp mitro-core/build/mitrocore.jar org.keyczar.KeyczarTool create --location=mitrocore_secrets/sign_keyczar --purpose=sign
-echo '{"hmacKeyString":"${echo $RANDOM_KEY | openssl dgst -sha1 }","size":256}' > mitrocore_secrets/sign_keyczar/1
+echo "{\"hmacKeyString\":\"${echo $RANDOM_KEY | openssl dgst -sha1 }\",\"size\":256}" > mitrocore_secrets/sign_keyczar/1
 
 echo "-----> Writing Procfile"
 # Write Procfile to root
