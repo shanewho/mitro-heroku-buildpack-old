@@ -34,7 +34,7 @@ Put your Heroku hostname in the Server hostname field (**Don't put the https:// 
 
 You are all set, sign up with a new account and you are ready to go.
 
-> #Just kidding, the mailing needs to be set up for this to work for real... working on that....
+> #Just kidding, the mailer still needs to be set up for this to work for real... working on that....
 
 ## For the paranoid
 
