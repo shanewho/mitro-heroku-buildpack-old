@@ -77,7 +77,7 @@ $BUILDCMD 2>&1 | indent
 if [ -n "$DEBUGBP" ]
 then
     ls -al ${PWD}  | indent
-
+    ls -al build  | indent
     ls -al ${BUILD_DIR}  | indent
 fi
 
