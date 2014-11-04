@@ -7,7 +7,7 @@ A heroku buildpack for the Mitro password manager.
 ## Deploy to Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/shanewho/mitro/tree/heroku-button)
 
-> This button currently uses a my experimental fork, not the official Mitro repo
+> This button currently uses a my experimental fork, not the official Mitro repo, it needs an app.json for it to work with the Heroku button.
 
 ## Do it manually
 
