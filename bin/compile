@@ -74,16 +74,16 @@ echo "-----> executing $BUILDCMD"
 
 $BUILDCMD 2>&1 | indent
 
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+    echo " !     Failed to build app with Apache Ant: ${PIPESTATUS[*]}"
+    exit 1
+fi
+
 if [ -n "$DEBUGBP" ]
 then
     ls -al ${PWD}  | indent
     ls -al build  | indent
     ls -al ${BUILD_DIR}  | indent
-fi
-
-if [ "${PIPESTATUS[*]}" != "0 0" ]; then
-    echo " !     Failed to build app with Apache Ant"
-    exit 1
 fi
 
 cd $BUILD_DIR
